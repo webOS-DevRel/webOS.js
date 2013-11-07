@@ -32,11 +32,19 @@
 if(window.PalmSystem) {
 	if(navigator.userAgent.indexOf("SmartTV")>-1) {
 		webOS.platform = {tv: true};
-	} else if(device.platformVersionMajor && device.platformVersionMinor &&
-			parseInt(device.platformVersionMajor)==3 && 
-			parseInt(device.platformVersionMinor)>0) {
-		webOS.platform = {open: true};
+	} else if(device.platformVersionMajor && device.platformVersionMinor) {
+		try {
+			var major = parseInt(device.platformVersionMajor);
+			var minor = parseInt(device.platformVersionMinor);
+			if(major<3 || (major==3 && minor<=0)) {
+				webOS.platform = {legacy: true};
+			} else {
+				webOS.platform = {open: true};
+			}
+		} catch(e) {
+			webOS.platform = {open: true};
+		}
 	} else {
-		webOS.platform = {legacy: true};
+		webOS.platform = {open: true};
 	}
 }
