@@ -32,10 +32,10 @@
 if(window.PalmSystem) {
 	if(navigator.userAgent.indexOf("SmartTV")>-1) {
 		webOS.platform = {tv: true};
-	} else if(device.platformVersionMajor && device.platformVersionMinor) {
+	} else if(webOS.device.platformVersionMajor && webOS.device.platformVersionMinor) {
 		try {
-			var major = parseInt(device.platformVersionMajor);
-			var minor = parseInt(device.platformVersionMinor);
+			var major = parseInt(webOS.device.platformVersionMajor);
+			var minor = parseInt(webOS.device.platformVersionMinor);
 			if(major<3 || (major==3 && minor<=0)) {
 				webOS.platform = {legacy: true};
 			} else {

@@ -19,4 +19,4 @@
  *
 */
 
-webOS.libVersion = "0.0.1";
+webOS.libVersion = "0.1.0";
