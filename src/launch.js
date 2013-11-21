@@ -49,5 +49,7 @@ if((webOS.platform.legacy || webOS.platform.open) && !window.cordova) {
 	};
 
 	//set the application to ready
-	window.PalmSystem.stageReady();
+	if(window.PalmSystem) {
+		window.PalmSystem.stageReady();
+	}
 }
