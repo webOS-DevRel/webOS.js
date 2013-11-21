@@ -53,7 +53,7 @@ var log = function(level, messageId, keyVals, freeText) {
 		}
 		if(window.PalmSystem.PmLogString) {
 			if(level==levelDebug) { //debug only accepts 2 arguments
-				window.PalmSystem.PmLogString(level, freeText);
+				window.PalmSystem.PmLogString(level, null, null, freeText);
 			} else {
 				window.PalmSystem.PmLogString(level, messageId, keyVals, freeText);
 			}
