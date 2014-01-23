@@ -10,9 +10,9 @@ SET STATUS=0
 REM Mainline
 
 if not exist "%WEBOSJS%node_modules\uglify-js\bin\uglifyjs" (
-	echo Installing UglifyJS...
-	mkdir "%WEBOSJS%node_modules"
-	npm install uglify-js --prefix "%WEBOSJS%"
+	echo Installing prerequisite UglifyJS...
+	if not exist "%WEBOSJS%node_modules" mkdir "%WEBOSJS%node_modules"
+	call npm install uglify-js --prefix "%WEBOSJS%node_modules"
 	(echo.)
 )
 

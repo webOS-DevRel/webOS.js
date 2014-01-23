@@ -24,9 +24,12 @@ writeFile() {
 
 if command -v node >/dev/null 2>&1; then
 	if [ ! -f "$WEBOSJS/node_modules/uglify-js/bin/uglifyjs" ]  ; then
-		echo "Installing UglifyJS..."
-		mkdir -p "$WEBOSJS/node_modules"
-		npm install uglify-js --prefix "$WEBOSJS"
+		echo "Installing prerequisite UglifyJS..."
+		if [ ! -e "$WEBOSJS/node_modules" ] ; then
+			mkdir -p "$WEBOSJS/node_modules"
+		fi
+		npm install uglify-js --prefix "$WEBOSJS/node_modules"
+		echo " "
 	fi
 	
 	
