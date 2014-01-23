@@ -11,6 +11,8 @@ writeFile() {
 	if [ $STATUS -eq 0 ] ; then
 		echo "// $2" >> "$OUTPUT"	
 		node "$WEBOSJS/node_modules/uglify-js/bin/uglifyjs" "$1" -e -v >> "$OUTPUT" 2>&1
+		echo " " >> "$OUTPUT"
+		echo " " >> "$OUTPUT"
 		RET=$?
 		if [ $RET -ne 0 ] ; then
 			echo " "

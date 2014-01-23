@@ -47,8 +47,10 @@ REM Functions
 	@echo off
 	REM Parameters: srcFilepath, srcFilename
 	if %STATUS% EQU 0 (
-		(echo. // %~2) >> "%OUTPUT%"
+		(echo // %~2) >> "%OUTPUT%"
 		node "%WEBOSJS%node_modules\uglify-js\bin\uglifyjs" "%~1" -e -v >> "%OUTPUT%" 2>&1
+		(echo.) >> "%OUTPUT%"
+		(echo.) >> "%OUTPUT%"
 		if !errorlevel! NEQ 0 (
 			(echo.)
 			echo ** Error processing %~2 **
