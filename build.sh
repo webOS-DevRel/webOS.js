@@ -23,6 +23,13 @@ writeFile() {
 # mainline
 
 if command -v node >/dev/null 2>&1; then
+	if [ ! -f "$WEBOSJS/node_modules/uglify-js/bin/uglifyjs" ]  ; then
+		echo "Installing UglifyJS..."
+		mkdir -p "$WEBOSJS/node_modules"
+		npm install uglify-js --prefix "$WEBOSJS"
+	fi
+	
+	
 	echo "Building webOS.js..."
 	echo "window.webOS = window.webOS || {};" > "$OUTPUT"
 	echo " " >> "$OUTPUT"

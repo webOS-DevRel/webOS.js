@@ -9,6 +9,13 @@ SET STATUS=0
 
 REM Mainline
 
+if not exist "%WEBOSJS%node_modules\uglify-js\bin\uglifyjs" (
+	echo Installing UglifyJS...
+	mkdir "%WEBOSJS%node_modules"
+	npm install uglify-js --prefix "%WEBOSJS%"
+	(echo.)
+)
+
 echo Building webOS.js...
 (echo window.webOS = window.webOS ^|^| {};) > "%OUTPUT%"
 (echo.) >> "%OUTPUT%"
@@ -40,7 +47,7 @@ REM Functions
 	@echo off
 	REM Parameters: srcFilepath, srcFilename
 	if %STATUS% EQU 0 (
-		(echo. // %~2) >> "%OUTPUT%"	
+		(echo. // %~2) >> "%OUTPUT%"
 		node "%WEBOSJS%node_modules\uglify-js\bin\uglifyjs" "%~1" -e -v >> "%OUTPUT%" 2>&1
 		if !errorlevel! NEQ 0 (
 			(echo.)
