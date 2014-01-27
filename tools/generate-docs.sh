@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DOCS="$(cd `dirname "$0"`; pwd)"
-WEBOSJS=`dirname "$DOCS"`
+TOOLS="$(cd `dirname "$0"`; pwd)"
+WEBOSJS="`dirname "$TOOLS"`"
 
 # mainline
 
@@ -15,13 +15,15 @@ if command -v node >/dev/null 2>&1; then
 		echo " "
 	fi
 	
+	rm -fr "$WEBOSJS/docs"
+	mkdir -p "$WEBOSJS/docs"	
 	
 	echo "Generating webOS.js Documentation..."
 	
-	#node "$WEBOSJS/node_modules/uglify-js/bin/uglifyjs" 
-	#if [ $? -eq 0 ] ; then
-	#	echo "Successfully built to $OUTPUT"
-	#fi
+	node "$WEBOSJS/node_modules/jsdoc/jsdoc.js" "$WEBOSJS/src" -d "$WEBOSJS/docs"
+	if [ $? -eq 0 ] ; then
+		echo "Successfully built to $WEBOSJS/docs"
+	fi
 else
 	echo "No node found in path"
 	exit 1

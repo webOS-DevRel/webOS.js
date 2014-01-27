@@ -1,6 +1,7 @@
 #!/bin/bash
 
-WEBOSJS="$(cd `dirname "$0"`; pwd)"
+TOOLS="$(cd `dirname "$0"`; pwd)"
+WEBOSJS="`dirname "$TOOLS"`"
 SRC="$WEBOSJS/src"
 OUTPUT="$WEBOSJS/webOS.js"
 STATUS=0

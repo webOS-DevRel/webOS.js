@@ -1,7 +1,7 @@
 @echo off
 
-SET DOCS=%~DP0
-for %%d in ("%DOCS%\..") do SET WEBOSJS=%%~fd\
+SET TOOLS=%~DP0
+for %%d in ("%TOOLS%\..") do SET WEBOSJS=%%~fd\
 
 REM Mainline
 
@@ -12,7 +12,10 @@ if not exist "%WEBOSJS%node_modules\jsdoc\jsdoc.js" (
 	(echo.)
 )
 
+rmdir /S /Q "%WEBOSJS%docs"
+mkdir "%WEBOSJS%docs"
+
 echo Generating webOS.js Documentation...
 
-REM node "%WEBOSJS%node_modules\uglify-js\bin\uglifyjs"
-REM if %errorlevel% EQU 0 echo Successfully built to %OUTPUT%
+node "%WEBOSJS%node_modules\jsdoc\jsdoc.js" "%WEBOSJS%src" -d "%WEBOSJS%docs"
+if %errorlevel% EQU 0 echo Successfully built to %WEBOSJS%docs

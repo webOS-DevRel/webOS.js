@@ -1,6 +1,7 @@
 @echo off
 
-SET WEBOSJS=%~DP0
+SET TOOLS=%~DP0
+for %%d in ("%TOOLS%\..") do SET WEBOSJS=%%~fd\
 SET SRC=%WEBOSJS%src
 SET OUTPUT=%WEBOSJS%webOS.js
 
