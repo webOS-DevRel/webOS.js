@@ -18,27 +18,36 @@ if not exist "%WEBOSJS%node_modules\uglify-js\bin\uglifyjs" (
 )
 
 echo Building webOS.js...
-(echo window.webOS = window.webOS ^|^| {};) > "%OUTPUT%"
-(echo.) >> "%OUTPUT%"
 
-REM device.js and platform.js have priority, so process them before the other files
+if "%1" == "" (
 
-if exist "%SRC%\device.js" (
-	call:writeFile "%SRC%\device.js" device.js
-)
-if exist "%SRC%\platform.js" (
-	call:writeFile "%SRC%\platform.js" platform.js
-)
+	(echo window.webOS = window.webOS ^|^| {};) > "%OUTPUT%"
+	(echo.) >> "%OUTPUT%"
 
-REM Process all the rest of the javascript files in the src directory
+	REM device.js and platform.js have priority, so process them before the other files
 
-for %%F in ("%SRC%\*.js") do (
-	if not "%%~dpnxF" == "%SRC%\device.js" (
-		if not "%%~dpnxF" == "%SRC%\platform.js" (
-			call:writeFile "%%~dpnxF" "%%~nxF"
+	if exist "%SRC%\device.js" (
+		call:writeFile "%SRC%\device.js" device.js
+	)
+	if exist "%SRC%\platform.js" (
+		call:writeFile "%SRC%\platform.js" platform.js
+	)
+
+	REM Process all the rest of the javascript files in the src directory
+
+	for %%F in ("%SRC%\*.js") do (
+		if not "%%~dpnxF" == "%SRC%\device.js" (
+			if not "%%~dpnxF" == "%SRC%\platform.js" (
+				call:writeFile "%%~dpnxF" "%%~nxF"
+			)
 		)
 	)
 )
+if "%1" == "--api" (
+	node "%TOOLS%\util\util.js" "%SRC%" "%OUTPUT%"
+	SET STATUS=!errorlevel!
+}
+
 if %STATUS% EQU 0 echo Successfully built to %OUTPUT%
 goto:eof
 

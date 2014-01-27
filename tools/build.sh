@@ -37,25 +37,31 @@ if command -v node >/dev/null 2>&1; then
 	
 	
 	echo "Building webOS.js..."
-	echo "window.webOS = window.webOS || {};" > "$OUTPUT"
-	echo " " >> "$OUTPUT"
 	
-	# device.js and platform.js have priority, so process them before the other files
-	if [ -f "$SRC/device.js" ] ; then
-		writeFile "$SRC/device.js" device.js
-	fi
-	if [ -f "$SRC/platform.js" ] ; then
-		writeFile "$SRC/platform.js" platform.js
-	fi
-	
-	# Process all the rest of the javascript files in the src directory
-	for f in "$SRC"/*.js ;	do
-		if [ "$f" != "$SRC/device.js" ] ; then
-			if [ "$f" != "$SRC/platform.js" ] ; then
-				writeFile "$f" "$(basename "$f")"
-			fi
+	if [ "$1" == "--api" ] ; then
+		node "$TOOLS/util/util.js" "$SRC" "$OUTPUT"
+		STATUS=$?
+	else
+		echo "window.webOS = window.webOS || {};" > "$OUTPUT"
+		echo " " >> "$OUTPUT"
+
+		# device.js and platform.js have priority, so process them before the other files
+		if [ -f "$SRC/device.js" ] ; then
+			writeFile "$SRC/device.js" device.js
 		fi
-	done
+		if [ -f "$SRC/platform.js" ] ; then
+			writeFile "$SRC/platform.js" platform.js
+		fi
+
+		# Process all the rest of the javascript files in the src directory
+		for f in "$SRC"/*.js ;	do
+			if [ "$f" != "$SRC/device.js" ] ; then
+				if [ "$f" != "$SRC/platform.js" ] ; then
+					writeFile "$f" "$(basename "$f")"
+				fi
+			fi
+		done
+	fi
 	
 	if [ $STATUS -eq 0 ] ; then
 		echo "Successfully built to $OUTPUT"
