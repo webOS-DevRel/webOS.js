@@ -19,14 +19,15 @@
  *
 */
 
+/** @namespace */
+
 /*
  * window.webOS.* namespace
  */
 
 /**
  * Fetches the appID of the caller app
- *
- * @return String					   AppID of the app.
+ * @returns {string} AppID of the app.
  */
 webOS.fetchAppId = function() {
 	if (window.PalmSystem) {
@@ -37,8 +38,7 @@ webOS.fetchAppId = function() {
 
 /**
  * Fetches the appinfo.json data of the caller app
- *
- * @return Object					   JSON data object read from the app's "appinfo.json" file.
+ * @returns {object} JSON data object read from the app's "appinfo.json" file.
  */
 webOS.fetchAppInfo = function() {
 	if(!this.appInfo) {
@@ -83,8 +83,7 @@ webOS.fetchAppInfo = function() {
 
 /**
  * Fetches the full root URI path of the caller app
- *
- * @return String					   App's URI path the app is within.
+ * @returns {string} App's URI path the app is within.
  */
 webOS.fetchAppRootPath = function() {
 	var base = window.location.href;
@@ -101,17 +100,4 @@ webOS.fetchAppRootPath = function() {
 		return match[0];
 	}
 	return "";
-};
-
-/**
- * Checks if a given event object (from a key event) corresponds to a webOS back gestures/button
- 
- *
- * @param {Object} inEvent				   Event data object from a key event callback
- *
- * @return Boolean					   Whether or not it's a back gesture/button event
- */
-webOS.isBackEvent = function(inEvent) {
-	return (inEvent.keyCode == 27 || inEvent.keyCode == 461 || inEvent.keyIdentifier == "U+1200001" ||
-                        inEvent.keyIdentifier == "U+001B" || inEvent.keyIdentifier == "Back");
 };
