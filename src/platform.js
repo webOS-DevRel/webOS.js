@@ -19,32 +19,35 @@
  *
 */
 
-/*
- * webOS.platform.* namespace
- * 
- * Platform identification of webOS variants
- *
- * LG webOS TV		webOS.platform.tv = true
- * Open webOS		webOS.platform.open = true
- * webOS 1.x-3.x	webOS.platform.legacy = true
+/**
+ * @namespace webOS.platform
  */
 
 if(window.PalmSystem) {
+	/**
+	 * Platform identification of webOS variants
+	 * @readonly
+	 * @type {object}
+	 * @property {?boolean} tv - Set true for LG webOS TV
+	 * @property {?boolean} open - Set true for Open webOS
+	 * @property {?boolean} legacy - Set true for legacy webOS 1.x-3.0.4
+ 	*/
+	webOS.platform = {};
 	if(navigator.userAgent.indexOf("SmartTV")>-1) {
-		webOS.platform = {tv: true};
+		webOS.platform.tv = true;
 	} else if(webOS.device.platformVersionMajor && webOS.device.platformVersionMinor) {
 		try {
 			var major = parseInt(webOS.device.platformVersionMajor);
 			var minor = parseInt(webOS.device.platformVersionMinor);
 			if(major<3 || (major==3 && minor<=0)) {
-				webOS.platform = {legacy: true};
+				webOS.platform.legacy = true;
 			} else {
-				webOS.platform = {open: true};
+				webOS.platform.open = true;
 			}
 		} catch(e) {
-			webOS.platform = {open: true};
+			webOS.platform.open = true;
 		}
 	} else {
-		webOS.platform = {open: true};
+		webOS.platform.open = true;
 	}
 }

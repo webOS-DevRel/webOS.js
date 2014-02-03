@@ -19,6 +19,10 @@
  *
 */
 
+/**
+ * @lends webOS
+ */
+
 //Convenience wrapper around PmLogLib logging API
 
 // Log level constants
@@ -67,35 +71,80 @@ var log = function(level, messageId, keyVals, freeText) {
  * window.webOS.* namespace
  */
 
-//* Call PalmSystem.PmLogString with "emergency" level
+/**
+ * Logs with PmLogLib at the "emergency" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
 webOS.emergency = function(messageId, keyVals, freeText) {
 	log(levelEmergency, messageId, keyVals, freeText);
 };
-//* Call PalmSystem.PmLogString with "alert" level
+
+/**
+ * Logs with PmLogLib at the "alert" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
 webOS.alert = function(messageId, keyVals, freeText) {
 	log(levelAlert, messageId, keyVals, freeText);
 };
-//* Call PalmSystem.PmLogString with "critical" level
+
+/**
+ * Logs with PmLogLib at the "critical" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
 webOS.critical = function(messageId, keyVals, freeText) {
 	log(levelCritical, messageId, keyVals, freeText);
 };
-//* Call PalmSystem.PmLogString with "error" level
+
+/**
+ * Logs with PmLogLib at the "error" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
 webOS.error = function(messageId, keyVals, freeText) {
 	log(levelError, messageId, keyVals, freeText);
 };
-//* Call PalmSystem.PmLogString with "warning" level
+
+/**
+ * Logs with PmLogLib at the "warning" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
 webOS.warning = function(messageId, keyVals, freeText) {
 	log(levelWarning, messageId, keyVals, freeText);
 };
-//* Call PalmSystem.PmLogString with "notice" level
+
+/**
+ * Logs with PmLogLib at the "notice" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
 webOS.notice = function(messageId, keyVals, freeText) {
 	log(levelNotice, messageId, keyVals, freeText);
 };
-//* Call PalmSystem.PmLogString with "info" level
+
+/**
+ * Logs with PmLogLib at the "info" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
 webOS.info = function(messageId, keyVals, freeText) {
 	log(levelInfo, messageId, keyVals, freeText);
 };
-//* Call PalmSystem.PmLogString with "debug" level.  Note, messageId and keyVals are not allowed.
+
+/**
+ * Logs with PmLogLib at the "debug" level
+ * @param {string} freeText - Text string to log
+ */
 webOS.debug = function(freeText) {
 	log(levelDebug, "", "", freeText);
 };

@@ -19,10 +19,8 @@
  *
 */
 
-/** @namespace */
-
-/*
- * window.webOS.* namespace
+/**
+ * @lends webOS
  */
 
 /**
@@ -101,3 +99,5 @@ webOS.fetchAppRootPath = function() {
 	}
 	return "";
 };
+/**#@-
+ */

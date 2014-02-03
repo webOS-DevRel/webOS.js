@@ -108,15 +108,70 @@ LS2Request.prototype.toString = function() {
 
 LS2Request.resubscribeDelay = 10000;
 
-/*
- * webOS.service.* namespace
+/**
+ * @namespace webOS.service
  */
+
+/**
+ * @callback webOS.service~successCallback
+ * @param {object} response - JSON object containing the service's response data.
+ */
+ 
+/**
+  * @callback webOS.service~failureCallback
+  * @param {object} error - JSON object containing the service's error details.
+  */
+ 
+/**
+  * @callback webOS.service~completeCallback
+  * @param {object} response - JSON object containing the service's response data; one of either proper 
+  *                            response data or error details.
+  */
+
+/**
+ * @typedef webOS.service~RequestObject
+ * @type {object}
+ * @property {string} uri - Full service request URI, including method name.
+ * @property {object} params - JSON object of the request parameters to send.
+ * @property {boolean} subscribe - Whether or not a subscription is desired for this request.
+ * @property {boolean} resubscribe - Whether or not the request should resubscribe after a failure has occured.
+ * @property {webOS.service~successCallback} onSuccess - Callback for a successful response.
+ * @property {webOS.service~failureCallback} onFailure - Callback for a failed response.
+ * @property {webOS.service~completeCallback} onComplete - Callback for when a request is complete 
+ *                                                         (regardless of success or failure).
+ * @property {function} send - Sends off the request. Automatically called on creation. No arguments.
+ * @property {function} cancel - Cancels the service request and any associated subscription. No arguments.
+ */
+
 webOS.service = {
+	/** Creates and sends off a service request to the system
+	 * @param {string} uri - Service URI. Accepts the normal service URI format, as well as the extended format with 
+	 *                       the service method included.
+	 * @param {object} [params] - Service request options.
+	 * @param {string} [params.method] - Service method being called.
+	 * @param {object} [params.parameters={}] - JSON object of the request parameters to send.
+	 * @param {boolean} [params.subscribe=false] - Whether or not a subscription is desired for this request.
+	 * @param {boolean} [params.resubscribe=false] - Whether or not the request should resubscribe after a failure 
+	 *                                               has occured.
+	 * @param {webOS.service~successCallback} [params.onSuccess] - Callback for a successful response.
+	 * @param {webOS.service~failureCallback} [params.onFailure] - Callback for a failed response.
+	 * @param {webOS.service~completeCallback} [params.onComplete] - Callback for when a request is complete 
+	 *                                                        (regardless of success or failure).
+	 * @return {webOS.service~RequestObject} Resulting request object. Can be used to cancel subscriptions.
+	 */
 	request: function (uri, params) {
 		return new LS2Request(uri, params);
 	},
+	/**
+	 * System service for the current device. Either "com.palm" or "com.webos".
+	 * @type {string} 
+	 */
 	systemPrefix: ((webOS.platform.legacy ||
 			webOS.platform.open) ? "com.palm" : "com.webos"),
+	/**
+	 * Service URI protocol for the current device. Either "palm://" or "luna://".
+	 * @type {string} 
+	 */
 	protocol: ((webOS.platform.legacy &&
 			webOS.device.platformVersionMajor &&
 			parseInt(webOS.device.platformVersionMajor)<=1) ? "palm://" : "luna://")
@@ -125,3 +180,4 @@ webOS.service = {
 navigator.service = {request:webOS.service.request};
 //temporary fallback for previous syntax
 navigator.service.Request = navigator.service.request;
+ 

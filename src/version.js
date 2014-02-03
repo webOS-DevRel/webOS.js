@@ -19,4 +19,14 @@
  *
 */
 
+/**
+ * @lends webOS
+ */
+
+/**
+ * Version string for this webOS.js build
+ * @type {string}
+ * @readonly
+ * @default
+ */
 webOS.libVersion = "0.1.0";
