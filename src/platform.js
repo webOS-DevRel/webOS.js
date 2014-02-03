@@ -33,7 +33,7 @@ if(window.PalmSystem) {
 	 * @property {?boolean} legacy - Set true for legacy webOS 1.x-3.0.4
  	*/
 	webOS.platform = {};
-	if(navigator.userAgent.indexOf("SmartTV")>-1) {
+	if((navigator.userAgent.indexOf("SmartTV")>-1) || (navigator.userAgent.indexOf("Large Screen")>-1)) {
 		webOS.platform.tv = true;
 	} else if(webOS.device.platformVersionMajor && webOS.device.platformVersionMinor) {
 		try {
