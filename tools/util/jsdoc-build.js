@@ -25,7 +25,8 @@ process.on('uncaughtException', function (err) {
 var node = process.argv[0],
 	util = process.argv[1],
 	src = process.argv[2],
-	output = process.argv[2];
+	output = process.argv[3]
+	base = path.join(__dirname, "webOSDocBase.js");
 
 
 // Mainline
@@ -45,39 +46,28 @@ fs.readdir(src, function(err, files) {
 	for(var i=0; i<files.length; i++) {
 		files[i] = path.join(src, files[i]);
 	}
-	fs.writeFile(output, "window.webOS = window.webOS || {};\n\n", function (err) {
-		if (err) throw err;
-		processFileChain(files, function() {
-			process.exit(0);
-		});
+	files.unshift(base);
+	processFileChain(files, function() {
+		process.exit(0);
 	});
 });
 
 
 // Functions
 
-function removeLicense(data) {
-	var i1 = data.indexOf("/*");
-	if(i1>-1) {
-		var i2 = data.indexOf("*/", i+2);
-		if(i2>-1) {
-			var possibleLicense = data.substring(i1, i2+2);
-			if(possibleLicense.indexOf("http://www.apache.org/licenses/LICENSE-2.0")>-1) {
-				return data.replace(possibleLicense, "");
-			} else {
-				return data;
-			}
-		}
-	}
-}
-
 function processFileChain(queue, callback) {
 	var file = queue.shift();
-	fs.readFile(file, function (err, data) {
+	fs.readFile(file, 'utf8', function (err, data) {
 		if (err) throw err;
-		data = removeLicense(data);
-		data = "// " + path.basename(file) + "\n\n(function(){" + data + "})();\n\n";
-		fs.appendFile(output, data, function (err) {
+		data = data.replace(/(?:\/\*[^*](?:[\s\S]*?)\*\/)|(?:([\s;])+\/\/(?:.*)$)/gm, '').replace(/\n\s*\n/g, '\n\n');
+		if(file===base) {
+			data = data + "\n\n";
+		} else {
+			data = "// " + path.basename(file) + "\n\n(function(){" + data + "})();\n\n\n";
+			//var fName = path.basename(file);
+			//data = "(function(){\n\n/** @exports " + fName.charAt(0).toUpperCase() + fName.substring(1, fName.length-3) + " */\n" + data + "})();\n\n\n";
+		}
+		fs[((file===base) ? "writeFile" : "appendFile")](output, data, function (err) {
   			if (err) throw err;
   			if(queue.length>0) {
 				processFileChain(queue, callback)
