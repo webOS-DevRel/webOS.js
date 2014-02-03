@@ -19,14 +19,14 @@
  *
 */
 
-/*
- * webOS.orientation.* namespace
+/**
+ * @namespace webOS.orientation
  */
+
 webOS.orientation = {
 	/**
 	 * Set the current window orientation
-	 *
-	 * @param {String} orientation		  	One of 'up', 'down', 'left', 'right', or 'free'.
+	 * @param {string} orientation - One of 'up', 'down', 'left', 'right', or 'free'.
 	 */
 	setOrientation: function(orientation) {
 		if(window.PalmSystem && PalmSystem.setWindowOrientation) {
@@ -36,8 +36,7 @@ webOS.orientation = {
 
 	/**
 	 * Returns the current window orientation
-	 *
-	 * @return String				Orientation is one of 'up', 'down', 'left', 'right', or 'free'
+	 * @return {string} Orientation is one of 'up', 'down', 'left', 'right', or 'free'
 	 */
 	getOrientation: function() {
 		if(window.PalmSystem && PalmSystem.setWindowOrientation) {

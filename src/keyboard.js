@@ -19,8 +19,8 @@
  *
 */
 
-/*
- * webOS.keyboard.* namespace
+/**
+ * @namespace webOS.keyboard
  */
 
 var hasVKeyboard = !(webOS.platform.legacy &&
@@ -39,23 +39,33 @@ if(hasVKeyboard) {
 	webOS.keyboard = {
 		/**
 		 * Virtual keyboard type constants
+		 * @readonly
+ 		 * @enum {number}
 		 */
 		types: {
+			/** Standard default keyboard layout */
 			text: 0,
+			/** Password-oriented keyboard layout */
 			password: 1,
+			/** Search-oriented keyboard layout */
 			search: 2,
+			/** Range-oriented keyboard layout */
 			range: 3,
+			/** Email-oriented keyboard layout */
 			email: 4,
+			/** Number-oriented keyboard layout */
 			number: 5,
+			/** Phone-oriented keyboard layout */
 			phone: 6,
+			/** URL-oriented keyboard layout */
 			url: 7,
+			/** Color-oriented keyboard layout */
 			color: 8
 		},
 	
 		/**
 		 * Returns whether or not the virtual keyboard is currently displayed
-		 *
-		 * @return Boolean					  Virtual keyboard visibility.
+		 * @return {boolean} Virtual keyboard visibility.
 		 */
 		isShowing: function() {
 			return state.isShowing || false;
@@ -63,8 +73,7 @@ if(hasVKeyboard) {
 	
 		/**
 		 * Shows the virtual keyboard
-		 *
-		 * @param {Number} type				 Type of virtual keyboard to display; from webOS.keyboard.types constants. (OPTIONAL)
+		 * @param {webOS.keyboard.types|number} [type=webOS.keyboard.types.text] - Type of virtual keyboard to display; from webOS.keyboard.types constants.
 		 */
 		show: function(type){
 			if(this.isManualMode() && window.PalmSystem) {
@@ -83,8 +92,7 @@ if(hasVKeyboard) {
 	
 		/**
 		 * Enables/disables manual mode for the virtual keyboard
-		 *
-		 * @param {Boolean} mode				 If true, keyboard must be manually forced shown/hidden. If false, it's automatic.
+		 * @param {boolean} mode - If true, keyboard must be manually forced shown/hidden. If false, it's automatic.
 		 */
 		setManualMode: function(mode){
 			state.manual = mode;
@@ -95,8 +103,7 @@ if(hasVKeyboard) {
 	
 		/**
 		 * Whether or not manual mode is set for the virtual keyboard
-		 *
-		 * @return Boolean					  Manual mode status
+		 * @return {boolean} Manual mode status
 		 */
 		isManualMode: function(){
 			return state.manual || false;
@@ -104,8 +111,7 @@ if(hasVKeyboard) {
 	
 		/**
 		 * Force the virtual keyboard to show. In the process, enables manual mode.
-		 *
-		 * @param {Number} type				 Type of virtual keyboard to display; from webOS.keyboard.types constants. (OPTIONAL)
+		 * @param {webOS.keyboard.types|number} [type=webOS.keyboard.types.text] - Type of virtual keyboard to display; from webOS.keyboard.types constants.
 		 */
 		forceShow: function(inType){
 			this.setManualMode(true);

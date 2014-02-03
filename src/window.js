@@ -19,15 +19,15 @@
  *
 */
 
-/*
- * webOS.window.* namespace
+/**
+ * @namespace webOS.window
  */
+
 webOS.window = {
 	/**
 	 * Returns the current launch parameters for the app
-	 *
-	 * @param {Object} inWindow			 A window object to reference from, otherwise current window. (OPTIONAL)
-	 * @return Object					   Launch parameters
+	 * @param {object} [inWindow=window] - A window object to reference from, otherwise current window.
+	 * @return {object} Launch parameters
 	 */
 	launchParams: function(inWindow) {
 		inWindow = inWindow || window;
@@ -39,9 +39,8 @@ webOS.window = {
 
 	/**
 	 * Whether a window is activated or not. Will turn to true on "resume" event and false on "pause" event
-	 *
-	 * @param {Object} inWindow			 A window object to reference from; if omitted, uses current window. (OPTIONAL)
-	 * @return Boolean					  Activated status
+	 * @param {object} [inWindow=window] - A window object to reference from; if omitted, uses current window.
+	 * @return {boolean} Activated status
 	 */
 	isActivated: function(inWindow) {
 		inWindow = inWindow || window;
@@ -53,8 +52,7 @@ webOS.window = {
 
 	/**
 	 * Tell webOS to activate the current page of your app, bringing it into focus.
-	 *
-	 * @param {Object} inWindow			 A window object to reference from; if omitted, uses current window. (OPTIONAL)
+	 * @param {object} [inWindow=window] - A window object to reference from; if omitted, uses current window.
 	 */
 	activate: function(inWindow) {
 		inWindow = inWindow || window;
@@ -65,8 +63,7 @@ webOS.window = {
 
 	/**
 	 * Tell webOS to deactivate your app.
-	 *
-	 * @param {Object} inWindow			 A window object to reference from; if omitted, uses current window. (OPTIONAL)
+	 * @param {object} [inWindow=window] - A window object to reference from; if omitted, uses current window.
 	 */
 	deactivate: function(inWindow) {
 		inWindow = inWindow || window;
@@ -77,10 +74,9 @@ webOS.window = {
 
 	/**
 	 * Creates a child window in a new card.
-	 *
-	 * @param {String} url				  URL for an HTML file to be loaded into the new card. (OPTIONAL)
-	 * @param {Function} html			   HTML code to inject into the new card's window. (OPTIONAL)
-	 * @return Object					   Window object of the child window for the new card
+	 * @param {string} [url] - URL for an HTML file to be loaded into the new card.
+	 * @param {string} [html] - HTML code to inject into the new card's window.
+	 * @return {object} Window object of the child window for the new card
 	 */
 	newCard: function(url, html) {
 		if(!url && !(webOS.platform.legacy || webOS.platform.open)) {
@@ -97,9 +93,8 @@ webOS.window = {
 	},
 
 	/**
-	 * Enable or disable full screen display. (Only works on old webOS and Open webOS)
-	 *
-	 * @param {Boolean} state				  Whether to enable or disable full screen mode
+	 * Enable or disable full screen display. (Only works on legacy webOS 1.x-3.0.4 and Open webOS)
+	 * @param {boolean} state - Whether to enable or disable full screen mode
 	 */
 	setFullScreen: function(state) {
 		// valid state values are: true or false
@@ -109,13 +104,12 @@ webOS.window = {
 	},
 
 	/**
-	 * Used to set the window properties of the WebOS app. Generally should not be needed by developers directly.
-	 *
-	 * @param {Object} inWindow			 A window object to reference from; if omitted, uses current window. (OPTIONAL)
-	 * @param {Object} inProps			  Properties to apply to the app window. Valid properties include:
-	 *										  {Boolean}  blockScreenTimeout	  If true, the screen will not dim or turn off in the absence of user activity. If false, the timeout behavior will be reinstated.
-	 *										  {Boolean}  setSubtleLightbar	   If true, the light bar will be made somewhat dimmer than normal. If false, it will return to normal.
-	 *										  {Boolean}  fastAccelerometer	   If true, the accelerometer rate will increase to 30 hz; false by default, rate is at 4 hz. Note fast rate is active only for apps when maximized.
+	 * Used to set the window properties of the WebOS application. Generally should not be needed by developers directly.
+	 * @param {object} inWindow=window] - A window object to reference from; if omitted, uses current window.
+	 * @param {object} inProps - Properties to apply to the app window. Valid properties include:
+	 * @param {boolean} [inProps.blockScreenTimeout] - If true, the screen will not dim or turn off in the absence of user activity. If false, the timeout behavior will be reinstated.
+	 * @param {boolean} [inProps.setSubtleLightbar] - If true, the light bar will be made somewhat dimmer than normal. If false, it will return to normal.
+	 * @param {boolean} [inProps.fastAccelerometer] - If true, the accelerometer rate will increase to 30 hz; false by default, rate is at 4 hz. Note fast rate is active only for apps when maximized.
 	 */
 	setWindowProperties: function(inWindow, inProps) {
 		if(arguments.length==1) {
@@ -130,9 +124,8 @@ webOS.window = {
 
 	/**
 	 * Used to get the window properties of the WebOS app. Generally should not be needed by developers directly.
-	 *
-	 * @param {Object} inWindow			 A window object to reference from; if omitted, uses current window. (OPTIONAL)
-	 * @return Object					   App window properties that have been set thus far.
+	 * @param {object} [inWindow=window] - A window object to reference from; if omitted, uses current window.
+	 * @return {object} Application window properties that have been set thus far.
 	 */
 	getWindowProperties: function(inWindow) {
 		inWindow = inWindow || window;
@@ -142,8 +135,7 @@ webOS.window = {
 
 	/**
 	 * Enable or disable screen timeout. When enabled, the device screen will not dim.
-	 *
-	 * @param {Boolean} state			   Whether or not to block screen timeout
+	 * @param {boolean} state - Whether or not to block screen timeout
 	 */
 	blockScreenTimeout: function(state) {
 		webOS.window.properties.blockScreenTimeout = state;
@@ -152,8 +144,7 @@ webOS.window = {
 
 	/**
 	 * Sets the lightbar to be a little dimmer for screen locked notifications.
-	 *
-	 * @param {Boolean} state			   Whether or not to dim the lightbar
+	 * @param {boolean} state - Whether or not to dim the lightbar
 	 */
 	setSubtleLightbar: function(state) {
 		webOS.window.properties.setSubtleLightbar = state;
@@ -162,8 +153,7 @@ webOS.window = {
 	
 	/**
 	 * Enable/disable fast accelerometer update rates.
-	 *
-	 * @param {Boolean} state	When false, accelerometer updates at 4Hz; when enabled, updates at 30Hz
+	 * @param {boolean} state - When false, accelerometer updates at 4Hz; when enabled, updates at 30Hz
 	 */
 	setFastAccelerometer: function(state) {
 		webOS.window.properties.fastAccelerometer = state;

@@ -1,4 +1,4 @@
+docs
 node_modules
-build.bat
-build.sh
+tools
 webOS.js

@@ -1,1 +1,8 @@
+/docs
+/node_modules
 /webOS.js
+/tools/util/docs-template/static
+/tools/util/docs-template/tmpl
+/tools/util/docs-template/LICENSE.md
+/tools/util/docs-template/publish.js
+/tools/util/docs-template/README.md
