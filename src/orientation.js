@@ -25,7 +25,7 @@
 
 webOS.orientation = {
 	/**
-	 * Set the current window orientation
+	 * Set the current window orientation, if supported
 	 * @param {string} orientation - One of 'up', 'down', 'left', 'right', or 'free'.
 	 */
 	setOrientation: function(orientation) {
