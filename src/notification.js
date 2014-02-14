@@ -118,7 +118,7 @@ webOS.notification = {
 			}
 		} else {
 			this.removeToastRequest = webOS.service.request("palm://com.webos.notification", {
-				method: "cancelToast",
+				method: "closeToast",
 				parameters: {toastId:toastId}
 			});
 		}
