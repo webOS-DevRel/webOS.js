@@ -20,6 +20,7 @@
 */
 
 /**
+ * Virtual Keyboard APIs. Not supported on webOS TV platform.
  * @namespace webOS.keyboard
  */
 

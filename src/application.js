@@ -99,5 +99,3 @@ webOS.fetchAppRootPath = function() {
 	}
 	return "";
 };
-/**#@-
- */
