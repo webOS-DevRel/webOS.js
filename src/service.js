@@ -163,11 +163,11 @@ webOS.service = {
 		return new LS2Request(uri, params);
 	},
 	/**
-	 * System service for the current device. Either "com.palm" or "com.webos".
+	 * System service for the current device. Either "com.palm." or "com.webos.".
 	 * @type {string} 
 	 */
 	systemPrefix: ((webOS.platform.legacy ||
-			webOS.platform.open) ? "com.palm" : "com.webos"),
+			webOS.platform.open) ? "com.palm." : "com.webos."),
 	/**
 	 * Service URI protocol for the current device. Either "palm://" or "luna://".
 	 * @type {string} 
