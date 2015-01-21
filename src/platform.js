@@ -34,7 +34,11 @@ if(window.PalmSystem) {
  	*/
 	webOS.platform = {};
 	if((navigator.userAgent.indexOf("SmartTV")>-1) || (navigator.userAgent.indexOf("Large Screen")>-1)) {
-		webOS.platform.tv = true;
+		if(webOS.device.modelName === "LGE Open webOS Device") {
+			webOS.platform.wearable = true;
+		} else {
+			webOS.platform.tv = true;
+		}
 	} else if(webOS.device.platformVersionMajor && webOS.device.platformVersionMinor) {
 		try {
 			var major = parseInt(webOS.device.platformVersionMajor);
