@@ -34,7 +34,14 @@ if(window.PalmSystem) {
  	*/
 	webOS.platform = {};
 	if((navigator.userAgent.indexOf("SmartTV")>-1) || (navigator.userAgent.indexOf("Large Screen")>-1)) {
-		webOS.platform.tv = true;
+		// FIXME : Wearable device provides "Linux/SmartTV" string in navigator.userAgent incorrectly.
+		// Until fixing correctly, The only way to distinguish tv and wearable device is
+		// checking webOS.device.modelName value which would be "LGE Open webOS Device" for wearable device and "webOS.TV" for tv.
+		if(webOS.device.modelName === "LGE Open webOS Device") {
+			webOS.platform.wearable = true;
+		} else {
+			webOS.platform.tv = true;
+		}
 	} else if(webOS.device.platformVersionMajor && webOS.device.platformVersionMinor) {
 		try {
 			var major = parseInt(webOS.device.platformVersionMajor);
