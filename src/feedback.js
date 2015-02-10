@@ -29,7 +29,7 @@ webOS.feedback = {
 	 * @param {string} param - feedback sound name
 	 */
 	play: function(param) {
-		if(webOS && webOS.platform && webOS.platform.wearable) {
+		if(webOS && webOS.platform && webOS.platform.watch) {
 			var params = {
 				name: param || "touch",
 				sink: "pfeedback"

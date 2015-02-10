@@ -32,7 +32,7 @@ webOS.voicereadout = {
 	 * @param {string} s - String to voice readout.
 	 */
 	readAlert: function(s) {
-		if(webOS && webOS.platform && webOS.platform.wearable) {
+		if(webOS && webOS.platform && webOS.platform.watch) {
 
 			/**
 			* Check VoiceReadOut talkback is enabled or not.
