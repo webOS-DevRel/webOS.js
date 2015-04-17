@@ -41,13 +41,13 @@ webOS.voicereadout = {
 			*
 			* @private
 			*/
-			var checkVoiceReadOut = function() {
+			var checkVoiceReadOut = function(callback) {
 				webOS.service.request("luna://com.webos.settingsservice", {
 					method: "getSystemSettings",
 					parameters: {"category":"VoiceReadOut"},
 					onSuccess: function(inResponse) {
 						if (inResponse && inResponse.settings.talkbackEnable) {
-							getLocaleInfo();
+							callback();
 						}
 					},
 					onFailure: function(inError) {
@@ -61,13 +61,13 @@ webOS.voicereadout = {
 			*
 			* @private
 			*/
-			var getLocaleInfo = function() {
+			var getLocaleInfo = function(callback) {
 				webOS.service.request("luna://com.webos.settingsservice", {
 					method: "getSystemSettings",
 					parameters: {"keys": ["localeInfo"]},
 					onSuccess: function(inResponse) {
 						locale = inResponse.settings.localeInfo.locales.TTS;
-						getSpeechRate();
+						callback();
 					},
 					onFailure: function(inError) {
 						console.error("Failed to get system localeInfo settings: " + JSON.stringify(inError));
@@ -80,13 +80,13 @@ webOS.voicereadout = {
 			*
 			* @private
 			*/
-			var getSpeechRate = function() {
+			var getSpeechRate = function(callback) {
 				webOS.service.request("luna://com.webos.settingsservice", {
 					method: "getSystemSettings",
 					parameters: {"category":"option", "key":"ttsSpeechRate"},
 					onSuccess: function(inResponse) {
 						speechRate = Number(inResponse.settings.ttsSpeechRate);
-						readAlertMessage();
+						callback();
 					},
 					onFailure: function(inError) {
 						console.error("Failed to get system speechRate settings: " + JSON.stringify(inError));
@@ -106,8 +106,11 @@ webOS.voicereadout = {
 				});
 			}
 
-			checkVoiceReadOut();
-
+			checkVoiceReadOut(function() {
+				getLocaleInfo(function() {
+					getSpeechRate(readAlertMessage);
+				});
+			});
 		}
 	}
 };
