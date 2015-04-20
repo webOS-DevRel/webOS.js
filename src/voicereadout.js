@@ -34,18 +34,20 @@ webOS.voicereadout = {
 	readAlert: function(s) {
 		if(webOS && webOS.platform && webOS.platform.watch) {
 
+			var locale, speechRate;
+
 			/**
 			* Check VoiceReadOut talkback is enabled or not.
 			*
 			* @private
 			*/
-			var checkVoiceReadOut = function() {
+			var checkVoiceReadOut = function(callback) {
 				webOS.service.request("luna://com.webos.settingsservice", {
 					method: "getSystemSettings",
 					parameters: {"category":"VoiceReadOut"},
 					onSuccess: function(inResponse) {
 						if (inResponse && inResponse.settings.talkbackEnable) {
-							getLocaleInfo();
+							callback();
 						}
 					},
 					onFailure: function(inError) {
@@ -59,15 +61,35 @@ webOS.voicereadout = {
 			*
 			* @private
 			*/
-			var getLocaleInfo = function() {
+			var getLocaleInfo = function(callback) {
 				webOS.service.request("luna://com.webos.settingsservice", {
 					method: "getSystemSettings",
 					parameters: {"keys": ["localeInfo"]},
 					onSuccess: function(inResponse) {
-						readAlertMessage(inResponse);
+						locale = inResponse.settings.localeInfo.locales.TTS;
+						callback();
 					},
 					onFailure: function(inError) {
 						console.error("Failed to get system localeInfo settings: " + JSON.stringify(inError));
+					}
+				});
+			};
+
+			/**
+			* Get current speech rate.
+			*
+			* @private
+			*/
+			var getSpeechRate = function(callback) {
+				webOS.service.request("luna://com.webos.settingsservice", {
+					method: "getSystemSettings",
+					parameters: {"category":"option", "key":"ttsSpeechRate"},
+					onSuccess: function(inResponse) {
+						speechRate = Number(inResponse.settings.ttsSpeechRate);
+						callback();
+					},
+					onFailure: function(inError) {
+						console.error("Failed to get system speechRate settings: " + JSON.stringify(inError));
 					}
 				});
 			};
@@ -77,20 +99,18 @@ webOS.voicereadout = {
 			*
 			* @private
 			*/
-			var readAlertMessage = function(inResponse) {
-				var locale;
+			var readAlertMessage = function() {
+				webOS.service.request("luna://com.lge.service.tts", {
+					method: "speak",
+					parameters: {"locale":locale, "text":s, "speechRate":speechRate}
+				});
+			};
 
-				if (inResponse && inResponse.settings.localeInfo) {
-					locale = inResponse.settings.localeInfo.locales.TTS;
-					webOS.service.request("luna://com.lge.service.tts", {
-						method: "speak",
-						parameters: {"locale":locale, "text":s}
-					});
-				}
-			}
-
-			checkVoiceReadOut();
-
+			checkVoiceReadOut(function() {
+				getLocaleInfo(function() {
+					getSpeechRate(readAlertMessage);
+				});
+			});
 		}
 	}
 };
