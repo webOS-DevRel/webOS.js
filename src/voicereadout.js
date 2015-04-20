@@ -104,7 +104,7 @@ webOS.voicereadout = {
 					method: "speak",
 					parameters: {"locale":locale, "text":s, "speechRate":speechRate}
 				});
-			}
+			};
 
 			checkVoiceReadOut(function() {
 				getLocaleInfo(function() {
