@@ -111,6 +111,44 @@ webOS.voicereadout = {
 					getSpeechRate(readAlertMessage);
 				});
 			});
+		} else if (webOS && webOS.platform && webOS.platform.tv) {
+
+			/**
+			* Check AudioGuidance is enabled or not.
+			*
+			* @private
+			*/
+			var checkAudioGuidance = function(callback) {
+				webOS.service.request("luna://com.webos.settingsservice", {
+					method: "getSystemSettings",
+					parameters: {"keys" : ["audioGuidance"],"category": "option"},
+					onSuccess: function(inResponse) {
+						if (inResponse && inResponse.settings.audioGuidance === "on") {
+							callback();
+						}
+					},
+					onFailure: function(inError) {
+						console.error("Failed to get system AudioGuidance settings: " + JSON.stringify(inError));
+					}
+				});
+			};
+
+			/**
+			* Read alert message using TTS api.
+			*
+			* @private
+			*/
+			var readAlertMessage = function() {
+				webOS.service.request("luna://com.webos.service.tts", {
+					method: "speak",
+					parameters: {"text":s, "clear": true},
+					onFailure: function(inError) {
+						console.error("Failed to readAlertMessage: " + JSON.stringify(inError));
+					}
+				});
+			};
+
+			checkAudioGuidance(readAlertMessage);
 		}
 	}
 };
