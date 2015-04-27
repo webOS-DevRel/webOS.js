@@ -149,6 +149,8 @@ webOS.voicereadout = {
 			};
 
 			checkAudioGuidance(readAlertMessage);
+		} else {
+			console.warn("Platform doesn't support TTS api.");
 		}
 	}
 };
