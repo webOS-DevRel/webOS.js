@@ -17,16 +17,18 @@
  * @namespace webOS.platform
  */
 
+/**
+ * Platform identification of webOS variants
+ * @readonly
+ * @type {object}
+ * @property {?boolean} tv - Set true for LG webOS SmartTV
+ * @property {?boolean} watch - Set true for LG webOS SmartWatch
+ * @property {?boolean} open - Set true for Open webOS
+ * @property {?boolean} legacy - Set true for legacy webOS (Palm and HP hardware)
+ * @property {?boolean} unknown - Set true for any unknown system
+*/
+webOS.platform = {};
 if(window.PalmSystem) {
-	/**
-	 * Platform identification of webOS variants
-	 * @readonly
-	 * @type {object}
-	 * @property {?boolean} tv - Set true for LG webOS TV
-	 * @property {?boolean} open - Set true for Open webOS
-	 * @property {?boolean} legacy - Set true for legacy webOS 1.x-3.0.4
- 	*/
-	webOS.platform = {};
 	if(navigator.userAgent.indexOf("SmartWatch")>-1) {
 		webOS.platform.watch = true;
 	} else if((navigator.userAgent.indexOf("SmartTV")>-1) || (navigator.userAgent.indexOf("Large Screen")>-1)) {
@@ -46,4 +48,6 @@ if(window.PalmSystem) {
 	} else {
 		webOS.platform.open = true;
 	}
+} else {
+	webOS.platform.unknown = true;
 }
