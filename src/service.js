@@ -47,6 +47,8 @@ function LS2Request(uri, params) {
 
 LS2Request.prototype.send = function() {
 	if(!window.PalmServiceBridge) {
+		this.onFailure && this.onFailure({errorCode:-1, errorText:"PalmServiceBridge not found.", returnValue: false});
+		this.onComplete && this.onComplete({errorCode:-1, errorText:"PalmServiceBridge not found.", returnValue: false});
 		console.error("PalmServiceBridge not found.");
 		return;
 	}
@@ -62,7 +64,8 @@ LS2Request.prototype.send = function() {
 		} catch(e) {
 			parsedMsg = {
 				errorCode: -1,
-				errorText: msg
+				errorText: msg,
+				returnValue: false
 			};
 		}
 		if((parsedMsg.errorCode || parsedMsg.returnValue==false) && self.onFailure) {
@@ -157,18 +160,15 @@ webOS.service = {
 		return new LS2Request(uri, params);
 	},
 	/**
-	 * System service for the current device. Either "com.palm." or "com.webos.".
+	 * System service name prefix
 	 * @type {string} 
 	 */
-	systemPrefix: ((webOS.platform.legacy ||
-			webOS.platform.open) ? "com.palm." : "com.webos."),
+	systemPrefix: "com.webos.",
 	/**
-	 * Service URI protocol for the current device. Either "palm://" or "luna://".
+	 * Service URI protocol
 	 * @type {string} 
 	 */
-	protocol: ((webOS.platform.legacy &&
-			webOS.device.platformVersionMajor &&
-			parseInt(webOS.device.platformVersionMajor)<=1) ? "palm://" : "luna://")
+	protocol: "luna://"
 };
 //for unified service request usage between webOS.js and Cordova in enyo-webos components
 navigator.service = {request:webOS.service.request};
