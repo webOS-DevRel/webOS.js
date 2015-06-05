@@ -33,20 +33,21 @@ if(window.PalmSystem) {
 		webOS.platform.watch = true;
 	} else if((navigator.userAgent.indexOf("SmartTV")>-1) || (navigator.userAgent.indexOf("Large Screen")>-1)) {
 		webOS.platform.tv = true;
-	} else if(webOS.device.platformVersionMajor && webOS.device.platformVersionMinor) {
+	} else {
 		try {
-			var major = parseInt(webOS.device.platformVersionMajor);
-			var minor = parseInt(webOS.device.platformVersionMinor);
-			if(major<3 || (major==3 && minor<=0)) {
-				webOS.platform.legacy = true;
-			} else {
-				webOS.platform.open = true;
+			var legacyInfo = JSON.parse(PalmSystem.deviceInfo || "{}");
+			if(legacyInfo.platformVersionMajor && legacyInfo.platformVersionMinor) {
+				var major = parseInt(legacyInfo.platformVersionMajor);
+				var minor = parseInt(legacyInfo.platformVersionMinor);
+				if(major<3 || (major==3 && minor<=0)) {
+					webOS.platform.legacy = true;
+				} else {
+					webOS.platform.open = true;
+				}
 			}
 		} catch(e) {
 			webOS.platform.open = true;
 		}
-	} else {
-		webOS.platform.open = true;
 	}
 } else {
 	webOS.platform.unknown = true;
