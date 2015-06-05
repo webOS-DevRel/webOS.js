@@ -50,7 +50,6 @@ function build() {
 	return gulp
 		.src([
 			'./src/core/foundation.js',
-			'./src/core/device.js',
 			'./src/core/platform.js',
 			'./src/*.js'
 		])
@@ -80,7 +79,6 @@ function jsdoc(cb) {
 		'-d',
 		path.resolve(opts.docdir),
 		path.join("src/core/foundation.js"),
-		path.join("src/core/device.js"),
 		path.join("src/core/platform.js"),
 		'src'
 	]
