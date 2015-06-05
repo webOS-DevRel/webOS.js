@@ -32,7 +32,7 @@ webOS.window = {
 		if(html) {
 			child.document.write(html);
 		}
-		if(child.PalmSystem) {
+		if(child.PalmSystem && child.PalmSystem.stageReady) {
 			child.PalmSystem.stageReady();
 		}
 		return child;
