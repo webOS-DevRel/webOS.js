@@ -22,7 +22,7 @@
  * @returns {string} AppID of the app.
  */
 webOS.fetchAppId = function() {
-	if (window.PalmSystem) {
+	if (window.PalmSystem && PalmSystem.identifier) {
 		// PalmSystem.identifier: <appid> <processid>
 		return PalmSystem.identifier.split(" ")[0];
 	}
@@ -67,7 +67,11 @@ webOS.fetchAppInfo = function() {
 			appInfoJSON = readAppInfoFile(paths[i]);
 		}
 		if(appInfoJSON) {
-			this.appInfo = enyo.json.parse(appInfoJSON);
+			try {
+				this.appInfo = JSON.parse(appInfoJSON);
+			} catch(e) {
+				console.error("Unable to parse appinfo.json file for " + appID);
+			}
 		}
 	}
 	return this.appInfo;
