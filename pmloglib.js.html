@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pmloglib.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pmloglib.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * Copyright (c) 2013-2015 LG Electronics
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
+/**
+ * @lends webOS
+ */
+
+//Convenience wrapper around PmLogLib logging API
+
+// Log level constants
+var levelNone	  = -1;
+var levelEmergency =  0;
+var levelAlert	 =  1;
+var levelCritical  =  2;
+var levelError	 =  3;
+var levelWarning   =  4;
+var levelNotice	=  5;
+var levelInfo	  =  6;
+var levelDebug	 =  7;
+var isObject = function(obj) {
+	return !!obj &amp;&amp; (typeof obj === "object") &amp;&amp; (Object.prototype.toString.call(obj) !== "[object Array]");
+};
+
+// Log function stringifies and escapes keyVals, and passes to PmLogString
+var log = function(level, messageId, keyVals, freeText) {
+	if(window.PalmSystem) {
+		if(keyVals &amp;&amp; !isObject(keyVals)) {
+			level = levelError;
+			keyVals = { msgid: messageId };
+			messageId = "MISMATCHED_FMT";
+			freeText = null;
+			console.warn("webOSLog called with invalid format: keyVals must be an object");
+		}
+		if(!messageId &amp;&amp; level != levelDebug) {
+			console.warn("webOSLog called with invalid format: messageId was empty");
+		}
+		if (keyVals) {
+			keyVals = JSON.stringify(keyVals);
+		}
+		if(window.PalmSystem.PmLogString) {
+			if(level==levelDebug) { //debug only accepts 2 arguments
+				window.PalmSystem.PmLogString(level, null, null, freeText);
+			} else {
+				window.PalmSystem.PmLogString(level, messageId, keyVals, freeText);
+			}
+		} else {
+			console.error("Unable to send log; PmLogString not found in this version of PalmSystem");
+		}
+	}
+};
+
+/*
+ * window.webOS.* namespace
+ */
+
+/**
+ * Logs with PmLogLib at the "emergency" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
+webOS.emergency = function(messageId, keyVals, freeText) {
+	log(levelEmergency, messageId, keyVals, freeText);
+};
+
+/**
+ * Logs with PmLogLib at the "alert" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
+webOS.alert = function(messageId, keyVals, freeText) {
+	log(levelAlert, messageId, keyVals, freeText);
+};
+
+/**
+ * Logs with PmLogLib at the "critical" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
+webOS.critical = function(messageId, keyVals, freeText) {
+	log(levelCritical, messageId, keyVals, freeText);
+};
+
+/**
+ * Logs with PmLogLib at the "error" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
+webOS.error = function(messageId, keyVals, freeText) {
+	log(levelError, messageId, keyVals, freeText);
+};
+
+/**
+ * Logs with PmLogLib at the "warning" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
+webOS.warning = function(messageId, keyVals, freeText) {
+	log(levelWarning, messageId, keyVals, freeText);
+};
+
+/**
+ * Logs with PmLogLib at the "notice" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
+webOS.notice = function(messageId, keyVals, freeText) {
+	log(levelNotice, messageId, keyVals, freeText);
+};
+
+/**
+ * Logs with PmLogLib at the "info" level
+ * @param {string} messageId - Short string that uniquely identifies the log message within a component.
+ * @param {object} keyVals - Key-value pairs to log
+ * @param {string} freeText - Text string to log
+ */
+webOS.info = function(messageId, keyVals, freeText) {
+	log(levelInfo, messageId, keyVals, freeText);
+};
+
+/**
+ * Logs with PmLogLib at the "debug" level
+ * @param {string} freeText - Text string to log
+ */
+webOS.debug = function(freeText) {
+	log(levelDebug, "", "", freeText);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="webOS.html">webOS</a></li><li><a href="webOS.html#.deviceInfo">deviceInfo</a></li><li><a href="webOS.feedback.html">feedback</a></li><li><a href="webOS.notification.html">notification</a></li><li><a href="webOS.html#.platform">platform</a></li><li><a href="webOS.service.html">service</a></li><li><a href="webOS.voicereadout.html">voicereadout</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Fri Jun 12 2015 15:08:37 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
