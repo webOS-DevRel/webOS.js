@@ -1,0 +1,3 @@
+[submodule "webOS.js"]
+	path = webOS.js
+	url = https://github.com/webOS-DevRel/webOS.js.git
