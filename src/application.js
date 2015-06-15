@@ -69,8 +69,12 @@ webOS.fetchAppInfo = function(callback, path) {
 						}
 					}
 				};
-				req.open('GET', curr, true);
-				req.send(null);
+				try {
+					req.open('GET', curr, true);
+					req.send(null);
+				} catch(e) {
+					checkAppInfo(parseInfo);
+				}
 			}
 		};
 		checkAppInfo(function(err, info) {
@@ -83,7 +87,6 @@ webOS.fetchAppInfo = function(callback, path) {
 					callback && callback();
 				}
 			} else {
-				console.error("Unable to find appinfo.json file for " + appID);
 				callback && callback();
 			}
 		});
