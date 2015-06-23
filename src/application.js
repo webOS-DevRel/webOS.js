@@ -22,55 +22,77 @@
  * @returns {string} AppID of the app.
  */
 webOS.fetchAppId = function() {
-	if (window.PalmSystem) {
+	if (window.PalmSystem && PalmSystem.identifier) {
 		// PalmSystem.identifier: <appid> <processid>
 		return PalmSystem.identifier.split(" ")[0];
 	}
 };
 
 /**
- * Fetches the appinfo.json data of the caller app
- * @returns {object} JSON data object read from the app's "appinfo.json" file.
+ * @callback webOS~appInfoCallback
+ * @param {?object} info - JSON data object read from the app's "appinfo.json" file. Undefined if not found.
  */
-webOS.fetchAppInfo = function() {
-	if(!this.appInfo) {
-		var readAppInfoFile = function(filepath) {
-			if(window.palmGetResource) {
-				try {
-					return palmGetResource(filepath);
-				} catch(e) {
-					console.log("error reading appinfo.json" + e.message);
-				}
+
+/**
+ * Fetches the appinfo.json data of the caller app with a cache saved to webOS.appInfo
+ * @param {webOS~appInfoCallback} callback - The function to called upon completion
+ * @param {string} [path] - A relative filepath from the current document to a specific appinfo to read
+ */
+webOS.fetchAppInfo = function(callback, path) {
+	if(!webOS.appInfo) {
+		var appID = this.fetchAppId();
+		// Virtually all apps will be at "appinfo.json", but extras help edge cases
+		var paths = [
+			this.fetchAppRootPath() + "appinfo.json",
+			"appinfo.json",
+			"file:///media/cryptofs/apps/usr/palm/applications/" + appID + "/appinfo.json",
+			"file:///usr/palm/applications/" + appID + "/appinfo.json"
+		];
+		var index = paths[1].indexOf(appID);
+		if(index>-1) { //Possible relative path fix for multiple language apps with multiple documents
+			paths.splice(1, 0, paths[1].substring(0, index) + appID + "/appinfo.json");
+		}
+		path && paths.unshift(path);
+
+		var checkAppInfo = function(parseInfo) {
+			if(paths.length==0) {
+				parseInfo({status:404});
 			} else {
+				var curr = paths.shift();
 				var req = new XMLHttpRequest();
-				req.open('GET', filepath + "?palmGetResource=true", false);
-				req.send(null);
-				if(req.status >= 200 && req.status < 300) {
-					return req.responseText;
-				} else {
-					console.log("error reading appinfo.json");
+				req.onreadystatechange = function() {
+					if(req.readyState==4) {
+						if((req.status >= 200 && req.status < 300) || req.status===0) {
+							parseInfo(undefined, req.responseText);
+						} else {
+							checkAppInfo(parseInfo);
+						}
+					}
+				};
+				try {
+					req.open('GET', curr, true);
+					req.send(null);
+				} catch(e) {
+					checkAppInfo(parseInfo);
 				}
 			}
 		};
-		var appID = this.fetchAppId();
-		var paths = [
-			this.fetchAppRootPath() + "appinfo.json",
-			"file:///media/cryptofs/apps/usr/palm/applications/" + appID + "/appinfo.json",
-			"file:///usr/palm/applications/" + appID + "/appinfo.json"
-		]; //possible appinfo paths to check
-		var index = paths[0].indexOf(appID);
-		if(index>-1) {
-			paths.unshift(paths[0].substring(0, index) + appID + "/appinfo.json");
-		}
-		var appInfoJSON = undefined;
-		for(var i=0; i<paths.length && !appInfoJSON; i++) {
-			appInfoJSON = readAppInfoFile(paths[i]);
-		}
-		if(appInfoJSON) {
-			this.appInfo = enyo.json.parse(appInfoJSON);
-		}
+		checkAppInfo(function(err, info) {
+			if(!err && info) {
+				try {
+					webOS.appInfo = JSON.parse(info);
+					callback && callback(webOS.appInfo);
+				} catch(e) {
+					console.error("Unable to parse appinfo.json file for " + appID);
+					callback && callback();
+				}
+			} else {
+				callback && callback();
+			}
+		});
+	} else {
+		callback && callback(webOS.appInfo);
 	}
-	return this.appInfo;
 };
 
 /**

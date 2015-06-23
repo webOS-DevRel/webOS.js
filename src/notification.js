@@ -26,23 +26,13 @@ webOS.notification = {
 	/**
 	 * Shows a temporary toast message via the system
 	 * @param {object} params - Toast notification parameters, including:
-	 * @param {string} params.message - Message to display.
-	 * @param {string} [params.icon] - Icon url for the notification.
+	 * @param {string} params.message - Message to display (upto 60 characters)
+	 * @param {string} [params.icon] - Icon url for the notification (80x80 png format)
 	 * @param {string} [params.appId] - AppID of app to launch when toast is clicked. Only needed to specific a different appID than current app.
-	 *                                  (Does not work on legacy webOS 1.x-3.0.4 and Open webOS)
-	 * @param {object} [params.params] - Launch parameters to send when clicked.
-	 * @param {string} [params.target] - A valid webOS mime type. An alternative to appId and params.
-	 *                                   (Does not work on legacy webOS 1.x-3.0.4 and Open webOS)
+	 * @param {object} [params.appParams] - Launch parameters to send when clicked.
+	 * @param {string} [params.target] - A target filepath to open; must be a valid webOS mimetype. An alternative to appId and params.
 	 * @param {boolean} [params.noaction] - If clicking the toast should do nothing.
-	 *                                     (Does not work on legacy webOS 1.x-3.0.4 and Open webOS)
 	 * @param {boolean} [params.stale] - If true, it's not actively displayed as a new notification.
-	 *                                   (Does not work on legacy webOS 1.x-3.0.4 and Open webOS)
-	 * @param {string}  [params.soundClass] - System class of sound to play on notification.
-	 *                                        (Legacy webOS 1.x-3.0.4 and Open webOS only)
-	 * @param {string}  [params.soundFile] - Sound filepath of file to play on notification.
-	 *                                       (Legacy webOS 1.x-3.0.4 and Open webOS only)
-	 * @param {string}  [params.soundDuration] - Duration for the sound to play on notification.
-	 *                                           (Legacy webOS 1.x-3.0.4 and Open webOS only)
 	 * @param {webOS.notification~toastCallback} [callback] - The function to call once the toast notification is initialized.
 	 */
 	showToast: function(params, callback) {
@@ -50,7 +40,7 @@ webOS.notification = {
 		var icon = params.icon || "";
 		var source = webOS.fetchAppId();
 		var appId = params.appId || source;
-		var toastParams = params.params || {};
+		var toastParams = params.appParams || {};
 		var target = params.target;
 		var noaction = params.noaction;
 		var stale = params.stale || false;

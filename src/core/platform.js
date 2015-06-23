@@ -17,33 +17,38 @@
  * @namespace webOS.platform
  */
 
+/**
+ * Platform identification of webOS variants
+ * @readonly
+ * @type {object}
+ * @property {?boolean} tv - Set true for LG webOS SmartTV
+ * @property {?boolean} watch - Set true for LG webOS SmartWatch
+ * @property {?boolean} open - Set true for Open webOS
+ * @property {?boolean} legacy - Set true for legacy webOS (Palm and HP hardware)
+ * @property {?boolean} unknown - Set true for any unknown system
+*/
+webOS.platform = {};
 if(window.PalmSystem) {
-	/**
-	 * Platform identification of webOS variants
-	 * @readonly
-	 * @type {object}
-	 * @property {?boolean} tv - Set true for LG webOS TV
-	 * @property {?boolean} open - Set true for Open webOS
-	 * @property {?boolean} legacy - Set true for legacy webOS 1.x-3.0.4
- 	*/
-	webOS.platform = {};
 	if(navigator.userAgent.indexOf("SmartWatch")>-1) {
 		webOS.platform.watch = true;
 	} else if((navigator.userAgent.indexOf("SmartTV")>-1) || (navigator.userAgent.indexOf("Large Screen")>-1)) {
 		webOS.platform.tv = true;
-	} else if(webOS.device.platformVersionMajor && webOS.device.platformVersionMinor) {
+	} else {
 		try {
-			var major = parseInt(webOS.device.platformVersionMajor);
-			var minor = parseInt(webOS.device.platformVersionMinor);
-			if(major<3 || (major==3 && minor<=0)) {
-				webOS.platform.legacy = true;
-			} else {
-				webOS.platform.open = true;
+			var legacyInfo = JSON.parse(PalmSystem.deviceInfo || "{}");
+			if(legacyInfo.platformVersionMajor && legacyInfo.platformVersionMinor) {
+				var major = parseInt(legacyInfo.platformVersionMajor);
+				var minor = parseInt(legacyInfo.platformVersionMinor);
+				if(major<3 || (major==3 && minor<=0)) {
+					webOS.platform.legacy = true;
+				} else {
+					webOS.platform.open = true;
+				}
 			}
 		} catch(e) {
 			webOS.platform.open = true;
 		}
-	} else {
-		webOS.platform.open = true;
 	}
+} else {
+	webOS.platform.unknown = true;
 }
