@@ -1,0 +1,11 @@
+{
+	"id": "com.lgsvl.webosjssampler",
+	"version": "0.0.1",
+	"vendor": "LG SVL",
+	"type": "web",
+	"main": "index.html",
+	"title": "webOS.js Sampler",
+	"icon": "icon.png",
+	"largeIcon": "largeIcon.png",
+	"uiRevision":2
+}
