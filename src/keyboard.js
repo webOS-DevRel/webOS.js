@@ -22,6 +22,6 @@ webOS.keyboard = {
 	 * @return {boolean} Whether or not the virtual keyboard is displaying
 	 */
 	isShowing: function () {
-		return PalmSystem && PalmSystem.isKeyboardVisible && PalmSystem.isKeyboardVisible();
+		return !!(PalmSystem && PalmSystem.isKeyboardVisible && PalmSystem.isKeyboardVisible());
 	}
 };
