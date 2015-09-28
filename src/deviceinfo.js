@@ -56,32 +56,42 @@ webOS.deviceInfo = function(callback) {
 		this.device.screenHeight = this.device.screenHeight || screen.height;
 		this.device.screenWidth = this.device.screenWidth || screen.width;
 		var self = this;
-		webOS.service.request("luna://com.webos.service.tv.systemproperty", {
-			method: "getSystemInfo",
-			parameters: { "keys": ["firmwareVersion", "modelName", "sdkVersion", "UHD"] },
-			onSuccess: function(response) {
-				self.device.modelName = response.modelName || self.device.modelName;
-				self.device.modelNameAscii  = response.modelName || self.device.modelNameAscii;
-				self.device.sdkVersion  = response.sdkVersion || self.device.sdkVersion;
-				self.device.uhd = (response.UHD==='true');
-				if(response.firmwareVersion) {
-					self.device.version = response.firmwareVersion;
-					var segments = self.device.version.split(".");
-					var keys = ["versionMajor", "versionMinor", "versionDot"];
-					for(var i=0; i<keys.length; i++) {
-						try {
-							self.device[keys[i]] = parseInt(segments[i]);
-						} catch(e) {
-							self.device[keys[i]] = segments[i];
+		if(webOS.platform.tv) {
+			webOS.service.request("luna://com.webos.service.tv.systemproperty", {
+				method: "getSystemInfo",
+				parameters: { "keys": ["firmwareVersion", "modelName", "sdkVersion", "UHD"] },
+				onSuccess: function(response) {
+					self.device.modelName = response.modelName || self.device.modelName;
+					self.device.modelNameAscii  = response.modelName || self.device.modelNameAscii;
+					self.device.sdkVersion  = response.sdkVersion || self.device.sdkVersion;
+					self.device.uhd = (response.UHD==='true');
+					if(!response.firmwareVersion || response.firmwareVersion==="0.0.0") {
+						response.firmwareVersion = response.sdkVersion;
+					}
+					if(response.firmwareVersion) {
+						self.device.version = response.firmwareVersion;
+						var segments = self.device.version.split(".");
+						var keys = ["versionMajor", "versionMinor", "versionDot"];
+						for(var i=0; i<keys.length; i++) {
+							try {
+								self.device[keys[i]] = parseInt(segments[i]);
+							} catch(e) {
+								self.device[keys[i]] = segments[i];
+							}
 						}
 					}
+					callback(self.device);
+				},
+				onFailure: function(inError) {
+					callback(self.device);
 				}
-				callback(self.device);
-			},
-			onFailure: function(inError) {
-				callback(self.device);
-			}
-		});
+			});
+		} else {
+		    if(webOS.platform.watch) {
+		    	this.device.modelName = this.device.modelNameAscii = "webOS Watch";
+		    }
+			callback(this.device);
+		}
 	} else {
 		callback(this.device);
 	}
