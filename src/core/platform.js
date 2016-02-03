@@ -48,6 +48,8 @@ if(window.PalmSystem) {
 		} catch(e) {
 			webOS.platform.open = true;
 		}
+		window.Mojo = window.Mojo || {relaunch: function(e) {}};
+		window.PalmSystem && PalmSystem.stageReady && PalmSystem.stageReady();
 	}
 } else {
 	webOS.platform.unknown = true;

@@ -36,48 +36,11 @@ webOS.fetchAppId = function() {
 /**
  * Fetches the appinfo.json data of the caller app with a cache saved to webOS.appInfo
  * @param {webOS~appInfoCallback} callback - The function to called upon completion
- * @param {string} [path] - A relative filepath from the current document to a specific appinfo to read
+ * @param {string} [path] - An optional relative filepath from the current document to a specific appinfo to read
  */
 webOS.fetchAppInfo = function(callback, path) {
 	if(!webOS.appInfo) {
-		var appID = this.fetchAppId();
-		// Virtually all apps will be at "appinfo.json", but extras help edge cases
-		var paths = [
-			this.fetchAppRootPath() + "appinfo.json",
-			"appinfo.json",
-			"file:///media/cryptofs/apps/usr/palm/applications/" + appID + "/appinfo.json",
-			"file:///usr/palm/applications/" + appID + "/appinfo.json"
-		];
-		var index = paths[1].indexOf(appID);
-		if(index>-1) { //Possible relative path fix for multiple language apps with multiple documents
-			paths.splice(1, 0, paths[1].substring(0, index) + appID + "/appinfo.json");
-		}
-		path && paths.unshift(path);
-
-		var checkAppInfo = function(parseInfo) {
-			if(paths.length==0) {
-				parseInfo({status:404});
-			} else {
-				var curr = paths.shift();
-				var req = new XMLHttpRequest();
-				req.onreadystatechange = function() {
-					if(req.readyState==4) {
-						if((req.status >= 200 && req.status < 300) || req.status===0) {
-							parseInfo(undefined, req.responseText);
-						} else {
-							checkAppInfo(parseInfo);
-						}
-					}
-				};
-				try {
-					req.open('GET', curr, true);
-					req.send(null);
-				} catch(e) {
-					checkAppInfo(parseInfo);
-				}
-			}
-		};
-		checkAppInfo(function(err, info) {
+		var parseInfo = function(err, info) {
 			if(!err && info) {
 				try {
 					webOS.appInfo = JSON.parse(info);
@@ -89,7 +52,23 @@ webOS.fetchAppInfo = function(callback, path) {
 			} else {
 				callback && callback();
 			}
-		});
+		};
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function() {
+			if(req.readyState==4) {
+				if((req.status >= 200 && req.status < 300) || req.status===0) {
+					parseInfo(undefined, req.responseText);
+				} else {
+					parseInfo({status:404});
+				}
+			}
+		};
+		try {
+			req.open('GET', path || 'appinfo.json', true);
+			req.send(null);
+		} catch(e) {
+			parseInfo({status:404});
+		}
 	} else {
 		callback && callback(webOS.appInfo);
 	}
