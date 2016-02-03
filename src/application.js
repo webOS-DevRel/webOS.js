@@ -94,3 +94,13 @@ webOS.fetchAppRootPath = function() {
 	}
 	return "";
 };
+
+/**
+ * Emulate the back key to move backwards 1 level.
+ */
+webOS.platformBack = function() {
+	if(window.PalmSystem && PalmSystem.platformBack) {
+		return PalmSystem.platformBack();
+	}
+};
+
