@@ -40,7 +40,7 @@ webOS.fetchAppId = function() {
  */
 webOS.fetchAppInfo = function(callback, path) {
 	if(!webOS.appInfo) {
-		parseInfo = function(err, info) {
+		var parseInfo = function(err, info) {
 			if(!err && info) {
 				try {
 					webOS.appInfo = JSON.parse(info);
