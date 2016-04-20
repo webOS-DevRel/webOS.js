@@ -27,7 +27,7 @@ webOS.voicereadout = {
 	 * @param {boolean} c - Clear optoin for TTS. If true it will cut off previous reading. Valid for TV only
 	 */
 	readAlert: function(s, c) {
-		var clear = (c === undefined)? true : c;
+		var clear = (typeof c === 'boolean')? c : true;
 
 		if(webOS && webOS.platform && webOS.platform.watch) {
 
