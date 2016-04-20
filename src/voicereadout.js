@@ -24,8 +24,11 @@ webOS.voicereadout = {
 	/**
 	 * Read alert text when accessibility VoiceReadout enabled.
 	 * @param {string} s - String to voice readout.
+	 * @param {boolean} c - Clear optoin for TTS. If true it will cut off previous reading. Valid for TV only
 	 */
-	readAlert: function(s) {
+	readAlert: function(s, c) {
+		var clear = (typeof c === 'boolean')? c : true;
+
 		if(webOS && webOS.platform && webOS.platform.watch) {
 
 			var locale, speechRate;
@@ -135,7 +138,7 @@ webOS.voicereadout = {
 			var readAlertMessage = function() {
 				webOS.service.request("luna://com.webos.service.tts", {
 					method: "speak",
-					parameters: {"text":s, "clear": true},
+					parameters: {"text":s, "clear": clear},
 					onFailure: function(inError) {
 						console.error("Failed to readAlertMessage: " + JSON.stringify(inError));
 					}
