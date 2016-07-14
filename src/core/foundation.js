@@ -5,3 +5,6 @@
  * @namespace webOS
  */
 window.webOS = window.webOS || {};
+if (typeof module === 'object' && module.exports) {
+	module.exports = window.webOS;
+}
